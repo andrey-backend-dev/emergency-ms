@@ -1,0 +1,29 @@
+server:
+  port: 8081
+
+spring:
+  mail:
+    test-connection: true
+    protocol: smtps
+    host: smtp.yandex.ru
+    port: 465
+    username: usedreamless@yandex.ru
+    password: hnbngpfvxqxnxyxn
+    properties.mail.smtp.auth: true
+    properties.mail.smtp.starttls.enable: true
+  application:
+    name: email-notifications
+  kafka:
+    consumer:
+      bootstrap-server: localhost:9092, localhost:9094
+      group-id: "email-notification-created-topic"
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+
+business:
+  message: "Уважаемый (ая), %s!<br><br>Это сообщение доставлено системой экстренных уведомлений [ENS].<br>Пожалуйста, свяжитесь с %s."
+  mail-subject: '[ENS] Emergency Call From'
+  email-regex: ^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$

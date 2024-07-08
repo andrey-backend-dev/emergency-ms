@@ -12,6 +12,14 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/email-notifications" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/email-notifications" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/emergency" />
         <option name="modules">
           <set>
