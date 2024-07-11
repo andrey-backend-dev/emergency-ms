@@ -24,6 +24,7 @@ public class EmailNotificationCreatedEventHandler {
         try {
             service.sendMessage(event.getReceiverEmail(), event.getMessage(), event.getReceiverName(), event.getCallerUsername());
         } catch (MessagingException ex) {
+            LOGGER.error("Non retryable exception occured, because of MessagingException. Message body: " + ex.getMessage());
             throw new NonRetryableException(ex);
         }
     }

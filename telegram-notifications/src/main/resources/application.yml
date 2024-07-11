@@ -1,0 +1,69 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: telegram-notifications
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/emergency_telegram_db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 123
+
+  kafka:
+    consumer:
+      bootstrap-server: localhost:9092, localhost:9094
+      group-id: "telegram-notification-created-topic"
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+    producer:
+      bootstrap-server: localhost:9092, localhost:9094
+      acks: all
+      retries: 10
+      properties:
+        enable:
+          idempotence: true
+        retry:
+          backoff:
+            ms: 1000
+
+        delivery:
+          timeout:
+            ms: 10000
+
+        linger:
+          ms: 0
+
+        request:
+          timeout:
+            ms: 5000
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+  flyway:
+    enabled: true
+
+business:
+  message: "Уважаемый (ая), %s!\n\nЭто сообщение доставлено системой экстренных уведомлений [ENS].\nПожалуйста, свяжитесь с %s."
+  username-regex: ^[a-zA-Z0-9]+$
+
+bot:
+  name: ens_ru_bot
+  token: 7243457701:AAHTRCWwVeKGWFRG_SIpdN55GLX5kfnabZQ
+  msg:
+    start: "Здравствуйте, это Телеграм Бот по отправке экстренных сообщений!\n
+    Добавляя этого бота, Вы получаете возможность получать экстренные уведомления от пользователей, которые указали Вас получателем."
+    accept: "Отныне Вы — участник ENS, поздравляем!\nТеперь Вы точно ничего не пропустите!"
+    deny: "Имейте в виду, что сообщения от пользователей, которые указали Вас в качестве получателя, не дойдут до Вас, 
+    пока Вы не станете участником ENS.\nЕсли захотите изменить свое решение, просто нажмите на кнопку 'Хочу быть участником ENS!'"
+
+kafka:
+  topics:
+    telegram-user: "telegram-receiver-user-response-topic"
