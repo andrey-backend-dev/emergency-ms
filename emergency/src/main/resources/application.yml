@@ -1,0 +1,64 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: emergency
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/emergency_notifications_db
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 123
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+  flyway:
+    enabled: true
+
+  kafka:
+    producer:
+      bootstrap-server: localhost:9092, localhost:9094
+      acks: all
+      retries: 10
+      properties:
+        enable:
+          idempotence: true
+        retry:
+          backoff:
+            ms: 1000
+        delivery:
+          timeout:
+            ms: 10000
+        linger:
+          ms: 0
+        request:
+          timeout:
+            ms: 5000
+    consumer:
+      bootstrap-server: localhost:9092, localhost:9094
+      group-id: "telegram-notification-created-topic"
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
+
+business:
+  username-regex: ^[a-zA-Z0-9]+$
+  email-regex: ^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$
+
+logging:
+  level:
+    org:
+      springframework:
+        security: TRACE
+
+kafka:
+  topics:
+    email: "email-notification-created-topic"
+    telegram: "telegram-notification-created-topic"
+    telegram-user: "telegram-receiver-user-request-topic"
